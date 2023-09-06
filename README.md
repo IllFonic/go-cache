@@ -22,7 +22,7 @@ one) to recover from downtime quickly. (See the docs for `NewFrom()` for caveats
 ```go
 import (
 	"fmt"
-	"github.com/IllFonic/go-cache"
+	cache "github.com/IllFonic/go-cache/v2"
 	"time"
 )
 
@@ -77,7 +77,3 @@ func main() {
 	}
 }
 ```
-
-### Reference
-
-`godoc` or [http://godoc.org/github.com/IllFonic/go-cache](http://godoc.org/github.com/IllFonic/go-cache)
