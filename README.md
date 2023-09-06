@@ -2,7 +2,7 @@
 
 go-cache is an in-memory key:value store/cache similar to memcached that is
 suitable for applications running on a single machine. Its major advantage is
-that, being essentially a thread-safe `map[string]interface{}` with expiration
+that, being essentially a thread-safe `map[string]any` with expiration
 times, it doesn't need to serialize or transmit its contents over the network.
 
 Any object can be stored, for a given duration or forever, and the cache can be
@@ -15,14 +15,14 @@ one) to recover from downtime quickly. (See the docs for `NewFrom()` for caveats
 
 ### Installation
 
-`go get github.com/patrickmn/go-cache`
+`go get github.com/IllFonic/go-cache`
 
 ### Usage
 
 ```go
 import (
 	"fmt"
-	"github.com/patrickmn/go-cache"
+	"github.com/IllFonic/go-cache"
 	"time"
 )
 
@@ -47,7 +47,7 @@ func main() {
 
 	// Since Go is statically typed, and cache values can be anything, type
 	// assertion is needed when values are being passed to functions that don't
-	// take arbitrary types, (i.e. interface{}). The simplest way to do this for
+	// take arbitrary types, (i.e. any). The simplest way to do this for
 	// values which will only be used once--e.g. for passing to another
 	// function--is:
 	foo, found := c.Get("foo")
@@ -80,4 +80,4 @@ func main() {
 
 ### Reference
 
-`godoc` or [http://godoc.org/github.com/patrickmn/go-cache](http://godoc.org/github.com/patrickmn/go-cache)
+`godoc` or [http://godoc.org/github.com/IllFonic/go-cache](http://godoc.org/github.com/IllFonic/go-cache)

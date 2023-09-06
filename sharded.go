@@ -4,8 +4,6 @@ import (
 	"crypto/rand"
 	"math"
 	"math/big"
-	insecurerand "math/rand"
-	"os"
 	"runtime"
 	"time"
 )
@@ -66,19 +64,19 @@ func (sc *shardedCache) bucket(k string) *cache {
 	return sc.cs[djb33(sc.seed, k)%sc.m]
 }
 
-func (sc *shardedCache) Set(k string, x interface{}, d time.Duration) {
+func (sc *shardedCache) Set(k string, x any, d time.Duration) {
 	sc.bucket(k).Set(k, x, d)
 }
 
-func (sc *shardedCache) Add(k string, x interface{}, d time.Duration) error {
+func (sc *shardedCache) Add(k string, x any, d time.Duration) error {
 	return sc.bucket(k).Add(k, x, d)
 }
 
-func (sc *shardedCache) Replace(k string, x interface{}, d time.Duration) error {
+func (sc *shardedCache) Replace(k string, x any, d time.Duration) error {
 	return sc.bucket(k).Replace(k, x, d)
 }
 
-func (sc *shardedCache) Get(k string) (interface{}, bool) {
+func (sc *shardedCache) Get(k string) (any, bool) {
 	return sc.bucket(k).Get(k)
 }
 
@@ -156,13 +154,10 @@ func runShardedJanitor(sc *shardedCache, ci time.Duration) {
 func newShardedCache(n int, de time.Duration) *shardedCache {
 	max := big.NewInt(0).SetUint64(uint64(math.MaxUint32))
 	rnd, err := rand.Int(rand.Reader, max)
-	var seed uint32
 	if err != nil {
-		os.Stderr.Write([]byte("WARNING: go-cache's newShardedCache failed to read from the system CSPRNG (/dev/urandom or equivalent.) Your system's security may be compromised. Continuing with an insecure seed.\n"))
-		seed = insecurerand.Uint32()
-	} else {
-		seed = uint32(rnd.Uint64())
+		panic(err)
 	}
+	seed := uint32(rnd.Uint64())
 	sc := &shardedCache{
 		seed: seed,
 		m:    uint32(n),
